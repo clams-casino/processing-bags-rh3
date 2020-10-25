@@ -32,11 +32,10 @@ TEXT_THICKNESS = 2
 
 print('Processing bag file: {}'.format(in_bag_path))
 for topic, msg, t in tqdm(in_bag.read_messages(), desc='processing bag images', total=in_bag.get_message_count()):
-    if 'image' in topic:
+    if msg._type == "sensor_msgs/Image":
         cv_img = bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
-        timestamp = msg.header.stamp.to_sec()
 
-        cv.putText(cv_img, 'Time: '+str(timestamp), 
+        cv.putText(cv_img, 'Time: '+str(msg.header.stamp.to_sec()), 
                     TEXT_POSITION, TEXT_FONT, TEXT_FONTSCALE, TEXT_COLOR, TEXT_THICKNESS)
 
         # TODO For testing remove later
@@ -44,7 +43,19 @@ for topic, msg, t in tqdm(in_bag.read_messages(), desc='processing bag images', 
         # cv.waitKey(2)
 
         img_msg = bridge.cv2_to_imgmsg(cv_img, encoding="passthrough")
-        out_bag.write(topic, img_msg, t)
+        
+    elif msg._type == "sensor_msgs/CompressedImage":
+        cv_img = bridge.compressed_imgmsg_to_cv2(msg, desired_encoding='passthrough')
+
+        cv.putText(cv_img, 'Time: '+str(msg.header.stamp.to_sec()), 
+                    TEXT_POSITION, TEXT_FONT, TEXT_FONTSCALE, TEXT_COLOR, TEXT_THICKNESS)
+
+        img_msg = bridge.cv2_to_compressed_imgmsg(cv_img)
+
+    else:
+        continue
+
+    out_bag.write(topic, img_msg, t)
 
 in_bag.close()
 out_bag.close()
