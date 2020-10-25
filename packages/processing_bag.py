@@ -30,7 +30,7 @@ TEXT_FONTSCALE = 1
 TEXT_COLOR = (0,0,0)
 TEXT_THICKNESS = 2
 
-print('Processing bag file: {}', in_bag_path)
+print('Processing bag file: {}'.format(in_bag_path))
 for topic, msg, t in tqdm(in_bag.read_messages(), desc='processing bag images', total=in_bag.get_message_count()):
     if 'image' in topic:
         cv_img = bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
@@ -44,8 +44,8 @@ for topic, msg, t in tqdm(in_bag.read_messages(), desc='processing bag images', 
         # cv.waitKey(2)
 
         img_msg = bridge.cv2_to_imgmsg(cv_img, encoding="passthrough")
-        out_bag.write(topic, img_msg)
+        out_bag.write(topic, img_msg, t)
 
 in_bag.close()
 out_bag.close()
-print('Wrote processed bag file to: {}', out_bag_path)
+print('Wrote processed bag file to: {}'.format(out_bag_path))
