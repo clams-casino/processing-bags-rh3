@@ -50,7 +50,7 @@ for topic, msg, t in tqdm(in_bag.read_messages(), desc='processing bag images', 
         cv.putText(cv_img, 'Time: '+str(msg.header.stamp.to_sec()), 
                     TEXT_POSITION, TEXT_FONT, TEXT_FONTSCALE, TEXT_COLOR, TEXT_THICKNESS)
 
-        img_msg = bridge.cv2_to_compressed_imgmsg(cv_img)
+        img_msg = bridge.cv2_to_compressed_imgmsg(cv_img, dst_format='jpeg')
 
     else:
         continue
