@@ -13,7 +13,7 @@ dt-launchfile-init
 # NOTE: Use `dt-exec COMMAND` to run the main process (blocking process)
 
 # launching app
-dt-exec python3 -m "processing_bag.py"
+dt-exec python3 "${DT_REPO_PATH}/packages/processing_bag.py"
 
 
 # ----------------------------------------------------------------------------
